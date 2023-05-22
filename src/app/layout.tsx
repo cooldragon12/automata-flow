@@ -29,12 +29,12 @@ export default function RootLayout({
               <li className="mr-6 hover:text-accent">
                 <a href="/d-finite-automata">DFA</a>
               </li>
-              <li className="mr-6 hover:text-accent">
+              {/* <li className="mr-6 hover:text-accent">
                 <a href="/n-finite-automata">PDA</a>
               </li>
               <li className="mr-6 hover:text-accent">
                 <a href="/n-finite-automata">CFG</a>
-              </li>
+              </li> */}
               <li className="mr-6 hover:text-accent">
                 <a href="/about">About</a>
               </li>
