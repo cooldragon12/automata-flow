@@ -3,25 +3,31 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --primary-color: #2C3E50;
+  --secondary-color: #E74C3C;
+  --accent-color:  #3498DB;
+  --background-color: #F2F2F2;
+  --text-color: #333333;
+  --success-color: #27AE60;
+  --warning-color: #F39C12;
+  --error-color: #C0392B;
 }
+
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --primary-color: #FFFFFF;
+    --secondary-color: #E74C3C ;
+    --accent-color:  #3498DB;
+    --background-color: #1E272E;
+    --text-color: #FFFFFF;
+    --success-color: #27AE60;
+    --warning-color: #F39C12;
+    --error-color: #C0392B;
   }
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  color: var(--text-color);
+  background-color: var(--background-color);
 }
