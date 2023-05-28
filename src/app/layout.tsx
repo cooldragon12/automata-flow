@@ -2,6 +2,8 @@ import Logo from '@/components/Logo'
 import './globals.css'
 import { Inter } from 'next/font/google'
 import { ThemeProvider } from '@/context/theme'
+import { Suspense } from 'react'
+import Loading from './loading'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
@@ -41,9 +43,11 @@ export default function RootLayout({
             
           </div>
         </nav>
-        <ThemeProvider>
-          {children}
-        </ThemeProvider>
+        <Suspense fallback={<Loading/>}>
+          <ThemeProvider>
+            {children}
+          </ThemeProvider>
+        </Suspense>
       </body>
     </html>
   )

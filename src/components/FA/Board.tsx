@@ -1,8 +1,32 @@
 "use client"
 import State from './State'
 import Xarrow, {Xwrapper} from 'react-xarrows'
-
+import { DFA } from "@/types/DFA";
+import { useEffect } from 'react';
 const Board = () => {
+    const values = ["(aa|bb)(a|b)*(a|b|ab|ba)|(a|b|ab|ba)*(aa|bab)*(a|b|aa)(a|b|bb|aa)*",
+    "((101)|(111)*|(100)|(1|0|11)*)(1|0|01)*(111|000|101)(1|0)*"]
+    /**
+     * ((101)|(111)*|
+     * (100)|(1|0|11)*)
+     * (1|0|01)*
+     * (111|000|101)
+     * (1|0)*
+     */
+    /**
+     * ------------
+     *    | a | b |
+     * ------------
+     * |q0| q1| q3|
+     * |q1| q2| None|
+     * |q2| q4| q2|
+     * |q3| None| q4|
+     * |q4| q4| q5|
+     * 
+     * 
+     */
+    useEffect(() => {
+    },[])
     return (
         <>
         <Xwrapper >
@@ -11,7 +35,7 @@ const Board = () => {
             {/* Follows the circle component */}
             
             <State  id="S1" state="1" valid={false} />
-            <Xarrow  animateDrawing={1} start={'initial_state'} end={'S1'} />
+            <Xarrow animateDrawing={1} start={'initial_state'} end={'S1'} />
 
            
             <State  id="S2" state="2" valid={true} />
