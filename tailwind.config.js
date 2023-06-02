@@ -1,10 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: 'class',
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+
   theme: {
     extend: {
       colors: {
@@ -16,6 +18,10 @@ module.exports = {
         success: '#27AE60',
         warning: '#F39C12',
         danger: '#C0392B',
+        // dark mode
+        dark_primary: '#FFFFFF',
+        dark_background: '#1E272E',
+        dark_text_color: '#FFFFFF',
       }
     },
   },

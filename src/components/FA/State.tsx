@@ -6,7 +6,7 @@ type StateProps = {
     state: "Start" | "+" | "-" |string;
     valid: boolean;
     id: string;
-    style?: MotionStyle
+    position?: MotionStyle;
 };
 
 /**
@@ -25,14 +25,14 @@ const State = (props:StateProps) => {
 
     return (
         <motion.div 
-            drag 
+            drag="y"
             dragControls={controls} 
             onPointerDown={startDrag}
             onPointerMove={updatePoints}
             onPointerUp={updatePoints}
             onPointerLeave={updatePoints}
-            whileDrag={{color: "orange", transition: {duration: 0.3, bounce: 0.2}}}
-            // dragSnapToOrigin={true}
+            whileDrag={{backgroundColor: "orange", transition: {duration: 0.3, bounce: 0.2}}}
+            dragSnapToOrigin={true}
             dragElastic={0.2}
             dragTransition={{ bounceStiffness: 150, bounceDamping: 2, power: 0.1 }}
             transition={{
@@ -41,7 +41,6 @@ const State = (props:StateProps) => {
                 ease: "easeInOut",
             }}
             id={props.id}
-            style={props.style}
             className={`flex items-center flex-col justify-center rounded-full w-[6em] h-[6em] border-4 transition-color ${props.valid? "border-success":"border-primary"}`}>
                 {props.state === "-"? 
                 <div className={`flex items-center flex-col justify-center rounded-full w-[2em] h-[3em] border-1 ${props.valid? "border-success":"border-primary"}`}>

@@ -1,9 +1,10 @@
-import Logo from '@/components/Logo'
 import './globals.css'
 import { Inter } from 'next/font/google'
-import { ThemeProvider } from '@/context/theme'
 import { Suspense } from 'react'
 import Loading from './loading'
+import NavHeader from '@/components/NavHeader'
+import { ThemeProvider } from '@/context/theme'
+import { ProblemProvider } from '@/context/problem'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
@@ -17,37 +18,16 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <nav className="flex items-center justify-between flex-wrap p-6">
-          <a href="/">
-          <Logo/>
-          </a>
-          <div className="flex items-center flex-shrink-0  mr-6 list-none">
-            
-              <li className="mr-6 hover:text-accent">
-                <a href="/">Problem</a>
-              </li>
-              <li className="mr-6 hover:text-accent">
-                <a href="/d-finite-automata">DFA</a>
-              </li>
-              {/* <li className="mr-6 hover:text-accent">
-                <a href="/n-finite-automata">PDA</a>
-              </li>
-              <li className="mr-6 hover:text-accent">
-                <a href="/n-finite-automata">CFG</a>
-              </li> */}
-              <li className="mr-6 hover:text-accent">
-                <a href="/about">About</a>
-              </li>
-            
-          </div>
-        </nav>
-        <Suspense fallback={<Loading/>}>
-          <ThemeProvider>
-            {children}
-          </ThemeProvider>
-        </Suspense>
+    <html lang="en" >
+      <body className={`${inter.className} transition-colors dark:bg-dark_background bg-background dark:text-dark_text_color text-text_color`}>
+        <ThemeProvider>
+          <ProblemProvider>
+            <NavHeader/>
+            <Suspense fallback={<Loading/>}>
+                {children}
+            </Suspense>
+          </ProblemProvider>
+        </ThemeProvider>
       </body>
     </html>
   )
