@@ -1,10 +1,12 @@
+"use client"
 import Board from "@/components/FA/Board"
 import HoverMenu from "@/components/HoverMenu";
 import TitleProblem from "@/components/TitleProblem";
-
+import {Notifications} from "@mantine/notifications";
 export default function Home() { 
   return (
     <main className="flex min-h-screen flex-col items-center px-24 py-20">
+      <Notifications />
       {/* Hover */}
       <HoverMenu/>
       {/* Main Content */}

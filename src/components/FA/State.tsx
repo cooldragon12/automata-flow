@@ -6,7 +6,7 @@ type StateProps = {
     state: "Start" | "+" | "-" |string;
     valid: boolean;
     id: string;
-    position?: MotionStyle;
+    style?: MotionStyle;
 };
 
 /**
@@ -31,7 +31,7 @@ const State = (props:StateProps) => {
             onPointerMove={updatePoints}
             onPointerUp={updatePoints}
             onPointerLeave={updatePoints}
-            whileDrag={{backgroundColor: "orange", transition: {duration: 0.3, bounce: 0.2}}}
+            whileDrag={{ transition:{duration: 0.3, bounce: 0.2}}}
             dragSnapToOrigin={true}
             dragElastic={0.2}
             dragTransition={{ bounceStiffness: 150, bounceDamping: 2, power: 0.1 }}
@@ -41,12 +41,14 @@ const State = (props:StateProps) => {
                 ease: "easeInOut",
             }}
             id={props.id}
-            className={`flex items-center flex-col justify-center rounded-full w-[6em] h-[6em] border-4 transition-color ${props.valid? "border-success":"border-primary"}`}>
-                {props.state === "-"? 
-                <div className={`flex items-center flex-col justify-center rounded-full w-[2em] h-[3em] border-1 ${props.valid? "border-success":"border-primary"}`}>
-                <p>{props.state}</p>
-                </div>:
-                <p>{props.state}</p>
+            style={props.style}
+            className={`flex items-center flex-col justify-center rounded-full w-[6em] h-[6em] border-4 transition-all hover:scale-110 hover:shadow-text_color hover:shadow-md ${props.valid? "border-success bg-success scale-110":"border-primary"}`}>
+                {
+                    props.state === "-"? 
+                    <div className={`flex items-center flex-col justify-center rounded-full w-[2em] h-[3em] border-1 ${props.valid? "border-success bg-success":"border-primary"}`}>
+                    <p>{props.state}</p>
+                    </div>:
+                    <p>{props.state}</p>
                 }
         </motion.div>
     );

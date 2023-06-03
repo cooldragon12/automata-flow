@@ -1,5 +1,4 @@
 
-import { ASTNode } from './AST';
 
 export class DFA {
   /**
@@ -35,13 +34,12 @@ export class DFA {
    */
   public F: string[]
 
-
-  constructor(regex: string, q0: string) {
-    this.Q = []; // set of states
-    this.Sigma = this.getSymbols(regex); // alphabet
-    this.delta = {}; // transition function
+  constructor(Sigma:string[], Q: string[] , q0: string, F: string[], delta: {[key: string]: string}) {
+    this.Q = Q; // set of states
+    this.Sigma = Sigma; // alphabet
+    this.delta = delta; // transition function
     this.q0 = q0; // start state
-    this.F = []; // final states
+    this.F = F; // final states
   }
   /**
    * @description gets the alphabet of the Regular Expression
@@ -58,13 +56,27 @@ export class DFA {
         symbols.push(reg[i]);
     return symbols;
   }
-  execute(w:string) {
+  *execute(w:string) {
     let q = this.q0;
-    while (w != "") {
-      q = this.delta[q+w[0]];
+    yield q; // Push the start state to the path
+    while (w != "" && this.Q.includes(q)) {
+      q = this.delta[`${q}.${w[0]}`];
+      yield q; // Push the current state to the path
       w = w.slice(1);
     }
-    if (this.F.includes(q)) return true;
+    if (this.F.includes(q)) 
+      return true;
+    return false;
+  }
+  validate(w:string):boolean {
+    let q = this.q0;
+    while (w != "" && this.Q.includes(q)) {
+      q = this.delta[`${q}.${w[0]}`];
+      w = w.slice(1);
+    }
+    if (this.F.includes(q)) 
+      return true;
     return false;
   }
 }
+

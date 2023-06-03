@@ -1,11 +1,10 @@
 "use client"
 import State from './State'
 import Xarrow, {Xwrapper} from 'react-xarrows'
-import { DFA } from "@/types/DFA";
+import {useProblem} from '@/context/problem'
 import { useEffect } from 'react';
 const Board = () => {
-    const values = ["(aa|bb)(a|b)*(a|b|ab|ba)|(a|b|ab|ba)*(aa|bab)*(a|b|aa)(a|b|bb|aa)*",
-    "((101)|(111)*|(100)|(1|0|11)*)(1|0|01)*(111|000|101)(1|0)*"]
+    const {state} = useProblem();
     /**
      * ((101)|(111)*|
      * (100)|(1|0|11)*)
@@ -30,19 +29,13 @@ const Board = () => {
     return (
         <>
         <Xwrapper >
-            <State   id='initial_state'  state="Start" valid={true} />
-
-            {/* Follows the circle component */}
-            <State id="S1" state="q1" valid={false} />
-            <Xarrow  start={'initial_state'} end={'S1'} />
-            <State  id="S2" state="q2" valid={true} />
-            <Xarrow   start={'S1'} end={'S3'} />
-            <State  id="S3" state="q3" valid={false}  />
-            <Xarrow   start={'S2'} end={'S3'} />
-            <Xarrow   start={'S1'} end={'S2'} />
-            <Xarrow   start={'final_state'} end={'initial_state'} />
-            <Xarrow   start={'S3'} end={'final_state'} />
-            <State  id='final_state'  state="-" valid={true} />
+            {
+                state.dfa.Q.map((q, i) => {
+                    return (
+                        <State key={i} id={q} state={q} valid={state.simulation.step === q ? true:false} />
+                    )
+                })
+            }
         </Xwrapper>
         </>
     )
