@@ -11,9 +11,9 @@ const Board = () => {
         const [from, val] = key.split('.')
         const to = state.dfa.delta[key]
         return (
-            <>
+            
             <Xarrow color='#ffffff' key={index} start={from} end={to} />
-            </>
+            
         )
     })
     
