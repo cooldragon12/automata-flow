@@ -6,7 +6,6 @@ type StateProps = {
     state: "Start" | "+" | "-" |string;
     valid: boolean;
     id: string;
-    style?: MotionStyle;
 };
 
 /**
@@ -24,6 +23,7 @@ const State = (props:StateProps) => {
     }
 
     return (
+        <>
         <motion.div 
             drag="y"
             dragControls={controls} 
@@ -31,26 +31,20 @@ const State = (props:StateProps) => {
             onPointerMove={updatePoints}
             onPointerUp={updatePoints}
             onPointerLeave={updatePoints}
-            whileDrag={{ transition:{duration: 0.3, bounce: 0.2}}}
+            whileDrag={{ transition:{duration: 0.3, bounce: 1}}}
             dragSnapToOrigin={true}
-            dragElastic={0.2}
-            dragTransition={{ bounceStiffness: 150, bounceDamping: 2, power: 0.1 }}
+            dragElastic={1}
+            dragTransition={{ bounceStiffness: 300, bounceDamping: 2, power: 1 }}
             transition={{
                 type: "tween",
-                duration: 2,
+                duration: 1,
                 ease: "easeInOut",
             }}
             id={props.id}
-            style={props.style}
-            className={`flex items-center flex-col justify-center rounded-full w-[6em] h-[6em] border-4 transition-all hover:scale-110 hover:shadow-text_color hover:shadow-md ${props.valid? "border-success bg-success scale-110":"border-primary"}`}>
-                {
-                    props.state === "-"? 
-                    <div className={`flex items-center flex-col justify-center rounded-full w-[2em] h-[3em] border-1 ${props.valid? "border-success bg-success":"border-primary"}`}>
-                    <p>{props.state}</p>
-                    </div>:
-                    <p>{props.state}</p>
-                }
+            className={`flex items-center flex-col justify-center rounded-full w-[6em] h-[6em] border-4 transition-color hover:shadow-text_color hover:shadow-md ${props.valid? "border-success bg-success":"border-primary"}`}>
+                <p>{props.state}</p>
         </motion.div>
+        </>
     );
 };
 

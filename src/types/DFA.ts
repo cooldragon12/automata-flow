@@ -34,12 +34,14 @@ export class DFA {
    */
   public F: string[]
 
+  public path: string[]
   constructor(Sigma:string[], Q: string[] , q0: string, F: string[], delta: {[key: string]: string}) {
     this.Q = Q; // set of states
     this.Sigma = Sigma; // alphabet
     this.delta = delta; // transition function
     this.q0 = q0; // start state
     this.F = F; // final states
+    this.path = [];
   }
   /**
    * @description gets the alphabet of the Regular Expression
@@ -56,22 +58,15 @@ export class DFA {
         symbols.push(reg[i]);
     return symbols;
   }
-  *execute(w:string) {
+  execute(w:string) {
+    if (this.path.length > 0)
+      this.path = [];
+      
     let q = this.q0;
-    yield q; // Push the start state to the path
+    this.path.push(q);
     while (w != "" && this.Q.includes(q)) {
       q = this.delta[`${q}.${w[0]}`];
-      yield q; // Push the current state to the path
-      w = w.slice(1);
-    }
-    if (this.F.includes(q)) 
-      return true;
-    return false;
-  }
-  validate(w:string):boolean {
-    let q = this.q0;
-    while (w != "" && this.Q.includes(q)) {
-      q = this.delta[`${q}.${w[0]}`];
+      this.path.push(q);
       w = w.slice(1);
     }
     if (this.F.includes(q)) 

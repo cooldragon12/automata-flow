@@ -18,15 +18,14 @@ export interface IProblemState{
     valid: boolean | null;
     simulation: {
         simulating: boolean;
-        generator?: Generator<string, boolean, unknown>;
-        step: any;
+        step: number;
     }
     currentInput: string;
     
 }
 
 export interface IProblemAction {
-    type:'SELECT' | 'ENTERED_INPUT'| 'START_SIMULATE'|  'VALIDATE' | 'END_SIMULATE' | 'NEXT_STEP';
+    type:'SELECT' | 'ENTERED_INPUT'| 'SIMULATE'|  'VALIDATE' | 'NEXT_STEP' | 'STOP_SIMULATION';
     payload:{
         selection: "1"|"2"|string;
         currentInput: string;
@@ -37,32 +36,31 @@ const reducer = (state: IProblemState, action: IProblemAction) => {
     switch (action.type){
         case 'SELECT':
             return {...state, selection: action.payload.selection, problem: action.payload.selection === "1" ? "(aa+bb)(a+b)*(a+b+ab+ba)+(a+b+ab+ba)*(aa+bab)*(a+b+aa)(a+b+bb+aa)*" : "((101)+(111)*+(100)+(1+0+11)*)(1+0+01)*(111+000+101)(1+0)*"};
-        case 'START_SIMULATE':
+        case 'SIMULATE':
+            state.dfa.execute(state.currentInput)
             return {
                 ...state, 
                 simulation:{
                     simulating: true,
-                    generator: state.dfa.execute(state.currentInput),
-                    step: ""
+                    path: state.dfa.path,
+                    step: 0
                 }
             };
-        case 'END_SIMULATE':
-            return {...state, simulation: {generator:undefined, simulating: false}};
         case 'VALIDATE':
             console.log(state.currentInput)
-            return {...state, valid: state.dfa.validate(state.currentInput)};
+            return {...state, valid: state.dfa.execute(state.currentInput)};
         case 'NEXT_STEP':
-            if(state.simulation.generator?.next().done){
-                return {...state, simulation: {generator:undefined, simulating: false, step: "Done"}};
-            }
-            else{
-                return {...state, simulation: {
-                    generator:state.simulation.generator, 
+            return {...state, simulation: {
                     simulating: state.simulation.simulating, 
-                    step: state.simulation.generator?.next()?.value
+                    step: state.simulation.step + 1
                 }
             };
-            }
+        case 'STOP_SIMULATION':
+            return {...state, simulation: {
+                    simulating: false, 
+                    step: -1
+                }
+            };
         case 'ENTERED_INPUT':
             return {...state, currentInput: action.payload.currentInput};
         
@@ -97,8 +95,7 @@ export const ProblemProvider = ({children}: {children: React.ReactNode}) => {
         valid: null,
         simulation: {
             simulating: false,
-            generator: undefined,
-            step:""
+            step:-1
         },
         currentInput: ""
     }
@@ -110,9 +107,7 @@ export const ProblemProvider = ({children}: {children: React.ReactNode}) => {
     useEffect(()=>{
         console.log("Problem Context: currentInput - ", state.currentInput)
     }, [state.currentInput]);
-    useEffect(()=>{
-        console.log("Problem Context: valid - ", state.simulation.step)
-    },[state.simulation.step])
+    
     return (
         <ProblemContext.Provider value={{state, dispatch}}>
             {children}

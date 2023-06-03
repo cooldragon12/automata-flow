@@ -3,38 +3,36 @@ import State from './State'
 import Xarrow, {Xwrapper} from 'react-xarrows'
 import {useProblem} from '@/context/problem'
 import { useEffect } from 'react';
+
+
 const Board = () => {
     const {state} = useProblem();
-    /**
-     * ((101)|(111)*|
-     * (100)|(1|0|11)*)
-     * (1|0|01)*
-     * (111|000|101)
-     * (1|0)*
-     */
-    /**
-     * ------------
-     *    | a | b |
-     * ------------
-     * |q0| q1| q3|
-     * |q1| q2| None|
-     * |q2| q4| q2|
-     * |q3| None| q4|
-     * |q4| q4| q5|
-     * 
-     * 
-     */
-    useEffect(() => {
-    },[])
+    const arrows = Object.keys(state.dfa.delta).map((key, index) => {
+        const [from, val] = key.split('.')
+        const to = state.dfa.delta[key]
+        return (
+            <>
+            <Xarrow color='#ffffff' key={index} start={from} end={to} />
+            </>
+        )
+    })
+    
     return (
         <>
         <Xwrapper >
             {
+                
                 state.dfa.Q.map((q, i) => {
                     return (
-                        <State key={i} id={q} state={q} valid={state.simulation.step === q ? true:false} />
+                        <div  key={i} className={`flex justify-center items-center ${i === 0 ? "row-span-4":"row-span-1"}`}>
+                            <State id={q} state={q} valid={state.dfa.path[state.simulation.step] === q ? true:false}/>
+                        </div>
                     )
                 })
+                
+            }
+            {
+                arrows
             }
         </Xwrapper>
         </>
