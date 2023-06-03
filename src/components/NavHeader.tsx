@@ -14,6 +14,7 @@ const NavHeader = () => {
             <a href="/">
                 <Logo/>
             </a>
+            
             <ul className="flex items-center flex-shrink-0  mr-6 list-none">
                 <li className="mr-6 hover:text-accent">
                     <a href="/">Problem</a>

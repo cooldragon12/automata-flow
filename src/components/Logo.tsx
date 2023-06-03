@@ -7,4 +7,4 @@ export default function Logo() {
             <p className="text-inherit text-lg font-medium first-letter:text-secondary">Flow</p>
         </div>
     )
-} 
+}

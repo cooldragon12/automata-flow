@@ -37,9 +37,11 @@ const reducer = (state: IProblemState, action: IProblemAction) => {
         case 'SELECT':
             return {...state, selection: action.payload.selection, problem: action.payload.selection === "1" ? "(aa+bb)(a+b)*(a+b+ab+ba)+(a+b+ab+ba)*(aa+bab)*(a+b+aa)(a+b+bb+aa)*" : "((101)+(111)*+(100)+(1+0+11)*)(1+0+01)*(111+000+101)(1+0)*"};
         case 'SIMULATE':
-            state.dfa.execute(state.currentInput)
+            
+            state.dfa.execute(state.currentInput);
             return {
-                ...state, 
+                ...state,
+                valid: null,
                 simulation:{
                     simulating: true,
                     path: state.dfa.path,
@@ -47,7 +49,7 @@ const reducer = (state: IProblemState, action: IProblemAction) => {
                 }
             };
         case 'VALIDATE':
-            console.log(state.currentInput)
+            // console.log(state.currentInput)
             return {...state, valid: state.dfa.execute(state.currentInput)};
         case 'NEXT_STEP':
             return {...state, simulation: {
@@ -56,15 +58,15 @@ const reducer = (state: IProblemState, action: IProblemAction) => {
                 }
             };
         case 'STOP_SIMULATION':
-            return {...state, simulation: {
+            return {...state, 
+                simulation: {
                     simulating: false, 
                     step: -1
-                }
+                },
+                valid: state.dfa.execute(state.currentInput)
             };
         case 'ENTERED_INPUT':
             return {...state, currentInput: action.payload.currentInput};
-        
-        
         default:
             return state;
     }

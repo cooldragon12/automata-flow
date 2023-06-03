@@ -41,7 +41,13 @@ const State = (props:StateProps) => {
                 ease: "easeInOut",
             }}
             id={props.id}
-            className={`flex items-center flex-col justify-center rounded-full w-[6em] h-[6em] border-4 transition-color hover:shadow-text_color hover:shadow-md ${props.valid? "border-success bg-success":"border-primary"}`}>
+            className={`
+            flex 
+            items-center 
+            flex-col 
+            justify-center 
+            rounded-full w-[6em] h-[6em] border-4 
+            transition-color transition-shadow hover:shadow-text_color hover:shadow-md ${props.valid? "border-success bg-success":"border-primary"}`}>
                 <p>{props.state}</p>
         </motion.div>
         </>

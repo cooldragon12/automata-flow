@@ -36,15 +36,15 @@ const LoadingLogo = () => {
     return(
         <div className="relative w-[13rem] h-[13rem]">
             <div
-                className="circle w-[6em] h-[6em] right-1 top-4 border-4 border-accent rounded-full flex items-center justify-center absolute bg-accent">
+                className="circle w-[6em] h-[6em] right-1 top-4 border-4 border-text_color rounded-full flex items-center justify-center absolute ">
                     +
             </div>
             <div
-                className="circle w-[4.5em] h-[4.5em] left-0 top-3  border-4 border-text_color rounded-full flex items-center justify-center absolute bg-accent">
+                className="circle w-[4.5em] h-[4.5em] left-0 top-3  border-4 border-text_color rounded-full flex items-center justify-center absolute ">
                     q1
             </div>
             <div
-                className="circle w-[3em] h-[3em] left-9 bottom-7 border-4 border-secondary rounded-full flex items-center justify-center absolute bg-accent">
+                className="circle w-[3em] h-[3em] left-9 bottom-7 border-4 border-secondary rounded-full flex items-center justify-center absolute ">
                     -
             </div>
         </div>
