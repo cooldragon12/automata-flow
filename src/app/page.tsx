@@ -15,7 +15,7 @@ export default function Home() {
 
       <TitleProblem/>
 
-      <div id="dfa" className="grid grid-cols-5 grid-rows-2 relative overflow-visible max-w-[60vw] w-[100%] max-h-[40vh] h-[40vh]">
+      <div id="dfa" className="grid grid-cols-5 grid-rows-4 relative overflow-visible max-w-[60vw] w-[100%] max-h-[40vh] h-[40vh]">
         
           <Board />
 

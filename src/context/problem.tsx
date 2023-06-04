@@ -15,7 +15,10 @@ export interface IProblemState{
     selection: "1"|"2"|string;
     problem?: "(aa+bb)(a+b)*(a+b+ab+ba)+(a+b+ab+ba)*(aa+bab)*(a+b+aa)(a+b+bb+aa)*"|"((101)+(111)*+(100)+(1+0+11)*)(1+0+01)*(111+000+101)(1+0)*"|string;
     dfa: DFA;
-    valid: boolean | null;
+    validation:{
+        valid: boolean | null;
+        validating: boolean;
+    };
     simulation: {
         simulating: boolean;
         step: number;
@@ -25,7 +28,7 @@ export interface IProblemState{
 }
 
 export interface IProblemAction {
-    type:'SELECT' | 'ENTERED_INPUT'| 'SIMULATE'|  'VALIDATE' | 'NEXT_STEP' | 'STOP_SIMULATION';
+    type:'SELECT' | 'ENTERED_INPUT'| 'SIMULATE'|  'VALIDATE' |'VALIDATING'| 'NEXT_STEP' | 'STOP_SIMULATION';
     payload:{
         selection: "1"|"2"|string;
         currentInput: string;
@@ -41,7 +44,10 @@ const reducer = (state: IProblemState, action: IProblemAction) => {
             state.dfa.execute(state.currentInput);
             return {
                 ...state,
-                valid: null,
+                validation:{
+                    validating: false,
+                    valid:null
+                },
                 simulation:{
                     simulating: true,
                     path: state.dfa.path,
@@ -50,9 +56,13 @@ const reducer = (state: IProblemState, action: IProblemAction) => {
             };
         case 'VALIDATE':
             // console.log(state.currentInput)
-            return {...state, valid: state.dfa.execute(state.currentInput)};
+            return {...state, validation:{validating:true, valid: null}};
+        case 'VALIDATING':
+            return {...state, validation:{validating:false, valid: state.dfa.execute(state.currentInput)}}
         case 'NEXT_STEP':
-            return {...state, simulation: {
+            return {...state, 
+                validation:{...state.validation},
+                simulation: {
                     simulating: state.simulation.simulating, 
                     step: state.simulation.step + 1
                 }
@@ -63,10 +73,13 @@ const reducer = (state: IProblemState, action: IProblemAction) => {
                     simulating: false, 
                     step: -1
                 },
-                valid: state.dfa.execute(state.currentInput)
+                validation: {
+                    validating: false,
+                    valid:state.dfa.execute(state.currentInput)
+                }
             };
         case 'ENTERED_INPUT':
-            return {...state, currentInput: action.payload.currentInput};
+            return {...state, validation:{valid:null, validating: state.validation.validating},currentInput: action.payload.currentInput};
         default:
             return state;
     }
@@ -75,7 +88,7 @@ const reducer = (state: IProblemState, action: IProblemAction) => {
 export const ProblemProvider = ({children}: {children: React.ReactNode}) => {
     const prob1 = new DFA(
             ["a","b"],  
-            ['q0', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7','q8'], 
+            ['q0', 'q1', 'q3', 'q5', 'q7', 'q2', 'q4', 'q6','q8'], 
             'q0', 
             ['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7','q8'],
             {
@@ -94,7 +107,10 @@ export const ProblemProvider = ({children}: {children: React.ReactNode}) => {
         selection: "1",
         problem: "(aa+bb)(a+b)*(a+b+ab+ba)+(a+b+ab+ba)*(aa+bab)*(a+b+aa)(a+b+bb+aa)*",
         dfa: prob1,
-        valid: null,
+        validation: {
+            validating:false,
+            valid:null
+        },
         simulation: {
             simulating: false,
             step:-1

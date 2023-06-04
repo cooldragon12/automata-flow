@@ -6,6 +6,7 @@ type StateProps = {
     state: "Start" | "+" | "-" |string;
     valid: boolean;
     id: string;
+    finalState?: boolean
 };
 
 /**
@@ -35,20 +36,15 @@ const State = (props:StateProps) => {
             dragSnapToOrigin={true}
             dragElastic={1}
             dragTransition={{ bounceStiffness: 300, bounceDamping: 2, power: 1 }}
-            transition={{
-                type: "tween",
-                duration: 1,
-                ease: "easeInOut",
-            }}
             id={props.id}
-            className={`
-            flex 
-            items-center 
-            flex-col 
-            justify-center 
-            rounded-full w-[6em] h-[6em] border-4 
-            transition-color transition-shadow hover:shadow-text_color hover:shadow-md ${props.valid? "border-success bg-success":"border-primary"}`}>
-                <p>{props.state}</p>
+            className={`flex items-center flex-col justify-center rounded-full w-[6em] h-[6em] border-4 font-bold transition-color transition-shadow hover:shadow-text_color hover:shadow-md ${props.valid? "border-success bg-success":"border-primary bg-transparent"}`}>
+                {
+                    props.finalState?
+                    <div className={`flex items-center flex-col justify-center  transition-color rounded-full w-[5em] h-[5em] border-4 ${props.valid? "border-success":"border-primary"}`}>
+                        <p>{props.state}</p>
+                    </div>:
+                    <p>{props.state}</p>
+                }
         </motion.div>
         </>
     );
