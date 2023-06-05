@@ -15,9 +15,11 @@ export default function Home() {
 
       <TitleProblem/>
 
-      <div id="dfa" className="grid grid-cols-5 grid-rows-4 relative overflow-visible max-w-[60vw] w-[100%] max-h-[40vh] h-[40vh]">
-        
-          <Board />
+      <div id="dfa" className="relative overflow-hidden flex justify-center items-center  max-w-[100vw] w-[100%] max-h-[70vh] h-[70vh]">
+          <div className="w-[65%] relative h-[100%]">
+            <Board />
+
+          </div>
 
       </div>
       <div id="pda" className="flex  items-center justify-between relative overflow-visible max-w-[60vw] w-[100%] max-h-[40vh] h-[40vh]">

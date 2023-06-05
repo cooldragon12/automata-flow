@@ -88,7 +88,8 @@ const reducer = (state: IProblemState, action: IProblemAction) => {
 export const ProblemProvider = ({children}: {children: React.ReactNode}) => {
     const prob1 = new DFA(
             ["a","b"],  
-            ['q0', 'q1', 'q3', 'q5', 'q7', 'q2', 'q4', 'q6','q8'], 
+            // ['q0', 'q1', 'q3', 'q5', 'q7', 'q2', 'q4', 'q6','q8'], 
+            ['q0','q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7','q8'],
             'q0', 
             ['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7','q8'],
             {
