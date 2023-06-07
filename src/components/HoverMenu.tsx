@@ -7,19 +7,19 @@ import {AiFillCheckCircle, AiFillCloseCircle} from "react-icons/ai";
 const HoverMenu = () => {
   const {state, dispatch} = useProblem();
   const validateHandler = () => {
-    dispatch({type:"VALIDATE", payload:{selection:"1", currentInput:""}})
+    dispatch({type:"VALIDATE"})
   }
   const stopValidationHandler = ()=>{
-    dispatch({type:"VALIDATING",payload:{selection:"1",currentInput:""}})
+    dispatch({type:"VALIDATING"})
   }
   const simulateHandler = () => {
-    dispatch({type:"SIMULATE", payload:{selection:"1", currentInput:""}})
+    dispatch({type:"SIMULATE"})
   }
   const nextStepHandler = () => {
-    dispatch({type:"NEXT_STEP", payload:{selection:"1", currentInput:""}})
+    dispatch({type:"NEXT_STEP"})
   }
   const stopSimulationHandler = () => {
-    dispatch({type:"STOP_SIMULATION", payload:{selection:"1", currentInput:""}})
+    dispatch({type:"STOP_SIMULATION"})
   }
   useEffect(() => {
     console.log("Simulating:",state.simulation.simulating, " in ", state.currentInput)
@@ -59,7 +59,7 @@ const HoverMenu = () => {
             <select 
               name="problem-selection" 
               placeholder='Expression' value={state.selection} 
-              onChange={(e)=>dispatch({type: 'SELECT', payload:{selection:e.target.value,currentInput:""}})} 
+              onChange={(e)=>dispatch({type: 'SELECT', payload:{selection:e.target.value}})} 
               className="dark:bg-dark_background bg-inherit border border-inherit rounded-lg p-3 m-2 focus-visible:outline-inherit flex-[0.8] transition-color" >
               <option value="1">Problem 1</option>
               <option value="2">Problem 2</option>
@@ -73,7 +73,7 @@ const HoverMenu = () => {
               <AiFillCloseCircle className="text-2xl text-danger absolute right-3"/>
             }
             <input 
-              onChange={(e)=>dispatch({type:"ENTERED_INPUT",payload:{selection:"1", currentInput:e.target.value}})} 
+              onChange={(e)=>dispatch({type:"ENTERED_INPUT",payload:{currentInput:e.target.value}})} 
               disabled={state.simulation.simulating} type="text" placeholder='Validaty' 
               className={`bg-inherit border border-inherit rounded-lg p-3 m-2 w-[100%] focus-within:outline-none focus-visible:outline-inherit ${state.validation.valid != null? state.validation.valid? "text-success": "text-danger":""}`} />
           </div>

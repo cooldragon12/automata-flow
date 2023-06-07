@@ -27,13 +27,11 @@ export interface IProblemState{
     
 }
 
-export interface IProblemAction {
-    type:'SELECT' | 'ENTERED_INPUT'| 'SIMULATE'|  'VALIDATE' |'VALIDATING'| 'NEXT_STEP' | 'STOP_SIMULATION';
-    payload:{
-        selection: "1"|"2"|string;
-        currentInput: string;
-    } 
-}
+export type IProblemAction = 
+    {type:'SELECT',
+    payload:{selection: "1"|"2"|string;} }| 
+    {type: 'ENTERED_INPUT', payload:{currentInput: string}}|
+    {type: | 'SIMULATE'|  'VALIDATE' |'VALIDATING'| 'NEXT_STEP' | 'STOP_SIMULATION'} 
 
 const reducer = (state: IProblemState, action: IProblemAction) => {
     switch (action.type){

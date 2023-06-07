@@ -16,9 +16,8 @@ export default function Home() {
       <TitleProblem/>
 
       <div id="dfa" className="relative overflow-hidden flex justify-center items-center  max-w-[100vw] w-[100%] max-h-[70vh] h-[70vh]">
-          <div className="w-[65%] relative h-[100%]">
+          <div className="overflow-visible w-[65%] relative h-[100%]">
             <Board />
-
           </div>
 
       </div>
