@@ -13,21 +13,23 @@ export const metadata = {
 }
 
 export default function RootLayout({
-  children,
+  children
 }: {
-  children: React.ReactNode
+  children: React.ReactNode,
 }) {
   return (
     <html lang="en" >
-      <body className={`${inter.className} transition-colors dark:bg-dark_background bg-background dark:text-dark_text_color text-text_color`}>
+      
+      <body className={`${inter.className} overflow-x-hidden relative transition-colors dark:bg-dark_background bg-background dark:text-dark_text_color text-text_color`}>
         <ThemeProvider>
-          <ProblemProvider>
-            <NavHeader/>
-            <Suspense fallback={<Loading/>}>
-                {children}
-            </Suspense>
-          </ProblemProvider>
+          <Suspense fallback={<Loading/>}>
+            <ProblemProvider>
+              <NavHeader/>
+                  {children}
+            </ProblemProvider>
+          </Suspense>
         </ThemeProvider>
+        
       </body>
     </html>
   )

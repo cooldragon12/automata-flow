@@ -38,10 +38,10 @@ const State = (props:StateProps) => {
             dragTransition={{ bounceStiffness: 300, bounceDamping: 2, power: 1 }}
             id={props.id}
             >
-                <motion.div className={`flex items-center flex-col justify-center rounded-full w-[6em] h-[6em] border-4 font-bold transition-all scale-100 hover:shadow-text_color hover:shadow-md ${props.valid? "border-success bg-success scale-110":"border-primary bg-transparent"}`}>
+                <motion.div className={`flex items-center flex-col justify-center rounded-full w-[5.5em] h-[5.5em] border-4 font-bold transition-all scale-100 hover:shadow-text_color hover:shadow-md ${props.valid? "border-success bg-success scale-110":"border-primary bg-transparent"}`}>
                     {
                         props.finalState?
-                        <div className={`flex items-center flex-col justify-center  transition-color rounded-full w-[5em] h-[5em] border-4 ${props.valid? "border-success":"border-primary"}`}>
+                        <div className={`flex items-center flex-col justify-center  transition-color rounded-full w-[4.5em] h-[4.5em] border-4 ${props.valid? "border-success":"border-primary"}`}>
                             <p>{props.state}</p>
                         </div>:
                         <p>{props.state}</p>

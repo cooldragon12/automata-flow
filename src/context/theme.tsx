@@ -1,5 +1,5 @@
 "use client"
-import React, {useState, createContext, useEffect} from "react";
+import React, {useState, createContext, useEffect, useCallback} from "react";
 
 
 
@@ -37,7 +37,7 @@ export const ThemeProvider = ({children}: {children: React.ReactNode}) => {
         localStorage.setItem("theme", "Dark");
         modeChange("Dark");
     }
-    const getTheme = ()=>{
+    const getTheme = useCallback(()=>{
         const userTheme = getUserTheme();
         const systemTheme = getSystemTheme();
         if (userTheme === "Dark" || (systemTheme && !userTheme)){
@@ -45,11 +45,14 @@ export const ThemeProvider = ({children}: {children: React.ReactNode}) => {
             modeChange("Dark");
             return; 
         }
-    }
+    }, []);
 
     useEffect(()=>{
         getTheme();
-    }, [theme]);
+        return ()=>{
+            getTheme();
+        };
+    }, [theme, getTheme]);
     
     return (
         <ThemeContext.Provider value={{theme, toggle}}>

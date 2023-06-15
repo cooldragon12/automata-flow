@@ -1,3 +1,21 @@
+/**
+ * @name Deterministic Finite Automaton
+ * 
+ * @description This class is used to create or construct a DFA. It has the following properties:
+ * 
+ * @property Q - set of states
+ * 
+ * @property Sigma - alphabet
+ * 
+ * @property delta - transition function
+ * 
+ * @property q0 - start state
+ * 
+ * @property F - final states
+ * 
+ * @property path - path of the DFA
+ * 
+ */
 export class DFA {
   /**
    * @description The set of states of the DFA

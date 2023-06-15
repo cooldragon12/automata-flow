@@ -1,33 +1,34 @@
 "use client"
 
 import { useProblem } from "@/context/problem";
-import {  useEffect } from "react";
+import {  useEffect, useCallback } from "react";
 import {AiFillCheckCircle, AiFillCloseCircle} from "react-icons/ai";
 
 const HoverMenu = () => {
   const {state, dispatch} = useProblem();
-  const validateHandler = () => {
+  const validateHandler = useCallback(() => {
     dispatch({type:"VALIDATE"})
-  }
-  const stopValidationHandler = ()=>{
+  }, [dispatch])
+  const stopValidationHandler = useCallback(()=>{
     dispatch({type:"VALIDATING"})
-  }
-  const simulateHandler = () => {
+  }, [dispatch])
+  const simulateHandler = useCallback(() => {
     dispatch({type:"SIMULATE"})
-  }
-  const nextStepHandler = () => {
+  }, [dispatch])
+  const nextStepHandler = useCallback(() => {
     dispatch({type:"NEXT_STEP"})
-  }
-  const stopSimulationHandler = () => {
+  }, [dispatch])
+  const stopSimulationHandler = useCallback(() => {
     dispatch({type:"STOP_SIMULATION"})
-  }
-  useEffect(() => {
-    console.log("Simulating:",state.simulation.simulating, " in ", state.currentInput)
-  }, [state.simulation.simulating])
+  }, [dispatch])
+  
   useEffect(()=>{
     if (state.validation.validating)
       stopValidationHandler()
-  }, [state.validation.validating])
+    return () => {
+      stopValidationHandler()
+    }
+  }, [state.validation.validating, stopValidationHandler])
   useEffect(() => { // Play sound on valid/invalid
     const audio1 = new Audio("/sound/ping.mp3");
     const audio2 = new Audio("/sound/error.mp3");
@@ -39,21 +40,24 @@ const HoverMenu = () => {
   }, [state.validation.valid])
 
   useEffect(() => {
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       if ((state.dfa.path.length > state.simulation.step) && state.simulation.step != -1)
         nextStepHandler()
       else
         if (state.simulation.simulating)
         stopSimulationHandler()
     }, 1000);
+    return () => {
+      clearTimeout(timeout); 
+    }
     console.log("Steps: ",state.simulation.step," out ",state.dfa.path.length-1)
-  }, [state.simulation.step])
+  }, [state.simulation.step, nextStepHandler, state.dfa.path.length, state.simulation.simulating, stopSimulationHandler])
 
   
   return(
     <>
       <menu className={`flex justify-center border border-text_color dark:border-primary rounded-md fixed shadow-background 
-                        bottom-[13%] 
+                        bottom-[9%] 
                         lg:left-[30%] backdrop-blur-md backdrop-brightness-120 w-[90vw] lg:w-[40vw] h-20 z-10`}>
           <div className="flex justify-center items-center outline-inherit border-inherit relative">
             <select 

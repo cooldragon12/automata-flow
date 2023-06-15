@@ -1,7 +1,7 @@
 "use client"
-import {DFA} from "@/types/DFA";
+import { CFG, DFA, PDA} from "@/types";
 import React, {useReducer, createContext, useEffect} from "react";
-
+import {prob1, prob1_cfg, prob1_pda, prob2, prob2_cfg, prob2_pda} from ".";
 
 
 export interface IProblemContext{
@@ -15,6 +15,8 @@ export interface IProblemState{
     selection: "1"|"2"|string;
     problem?: "(aa+bb)(a+b)*(a+b+ab+ba)+(a+b+ab+ba)*(aa+bab)*(a+b+aa)(a+b+bb+aa)*"|"((101)+(111)*+(100)+(1+0+11)*)(1+0+01)*(111+000+101)(1+0)*"|string;
     dfa: DFA;
+    cfg: CFG;
+    pda: PDA;
     validation:{
         valid: boolean | null;
         validating: boolean;
@@ -26,41 +28,7 @@ export interface IProblemState{
     currentInput: string;
     
 }
-const prob1 = new DFA(
-            ["a","b"],  
-            // ['q0', 'q1', 'q3', 'q5', 'q7', 'q2', 'q4', 'q6','q8'], 
-            ['q0','q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7','q8'],
-            'q0', 
-            ['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7','q8'],
-            {
-                "q0.a":"q1", "q0.b":"q2",
-                "q1.a":"q3", "q1.b":"q7",
-                "q2.a":"q8", "q2.b":"q4",
-                "q3.a":"q5", "q3.b":"q6",
-                "q4.a":"q5", "q4.b":"q6",
-                "q5.a":"q5", "q5.b":"q6",
-                "q6.a":"q5", "q6.b":"q6",
-                "q7.a":"q8", "q7.b":"q8",
-                "q8.a":"q7", "q8.b":"q7",
-            }
-        );
-const prob2 = new DFA(
-        ["0","1"],
-        ['q0', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7','q8'],
-        'q0',
-        ['q8'],
-        {
-            "q0.0":"q1", "q0.1":"q1",
-            "q1.0":"q3", "q1.1":"q2",
-            "q2.0":"q4", "q2.1":"q5",
-            "q3.0":"q7", "q3.1":"q6",
-            "q4.0":"q7", "q4.1":"q8",
-            "q5.0":"q4", "q5.1":"q8",
-            "q6.0":"q4", "q6.1":"q5",
-            "q7.0":"q8", "q7.1":"q2",
-            "q8.0":"q8", "q8.1":"q8",
-        }
-    );
+
 
 export type IProblemAction = 
     {type:'SELECT',
@@ -74,7 +42,9 @@ const reducer = (state: IProblemState, action: IProblemAction) => {
             return {...state, 
                 selection: action.payload.selection, 
                 problem: action.payload.selection === "1" ? "(aa+bb)(a+b)*(a+b+ab+ba)+(a+b+ab+ba)*(aa+bab)*(a+b+aa)(a+b+bb+aa)*" : "((101)+(111)*+(100)+(1+0+11)*)(1+0+01)*(111+000+101)(1+0)*",
-                dfa: action.payload.selection=== "1"? prob1: prob2};
+                dfa: action.payload.selection=== "1"? prob1: prob2,
+                cfg: action.payload.selection=== "1"? prob1_cfg: prob2_cfg,
+                pda: action.payload.selection=== "1"? prob1_pda: prob2_pda,};
         case 'SIMULATE':
             
             state.dfa.execute(state.currentInput);
@@ -126,6 +96,8 @@ export const ProblemProvider = ({children}: {children: React.ReactNode}) => {
         selection: "1",
         problem: "(aa+bb)(a+b)*(a+b+ab+ba)+(a+b+ab+ba)*(aa+bab)*(a+b+aa)(a+b+bb+aa)*",
         dfa: prob1,
+        cfg: prob1_cfg,
+        pda: prob1_pda,
         validation: {
             validating:false,
             valid:null

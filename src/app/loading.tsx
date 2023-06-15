@@ -3,7 +3,7 @@ import LoadingLogo from "@/components/LoadingLogo";
 
 function Loading() {
   return (
-    <div className="flex w-[100%] h-[100%] justify-center items-center">
+    <div className="flex top-0 left-0 absolute w-screen h-screen justify-center items-center">
       <LoadingLogo />
     </div>
     )
