@@ -74,7 +74,7 @@ const HoverMenu = () => {
             }
             <input 
               onChange={(e)=>dispatch({type:"ENTERED_INPUT",payload:{currentInput:e.target.value}})} 
-              disabled={state.simulation.simulating} type="text" placeholder='Validaty' 
+              disabled={state.simulation.simulating} type="text" placeholder='String or Input' 
               className={`bg-inherit border border-inherit rounded-lg p-3 m-2 w-[100%] focus-within:outline-none focus-visible:outline-inherit ${state.validation.valid != null? state.validation.valid? "text-success": "text-danger":""}`} />
           </div>
           <div className="flex gap-0">
