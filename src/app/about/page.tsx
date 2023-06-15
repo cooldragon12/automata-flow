@@ -43,7 +43,7 @@ export default function About() {
                 </div>
                 
             </section>
-            <section className=" flex flex-col justify-center h-[100vh] z-10">
+            <section className=" flex flex-col justify-center md:h-[80vh] lg:h-screen z-10">
                 <div className="flex items-center justify-center py-10">
                     <h1 className="text-2xl font-bold p-10">Meet The Team</h1>
                 </div>
