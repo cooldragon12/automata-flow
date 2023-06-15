@@ -58,5 +58,42 @@ export const prob2_cfg = new CFG(
     "S"
 )
 
-export const prob1_pda = new PDA()
-export const prob2_pda = new PDA()
+export const prob1_pda = new PDA(
+    {
+        "Start":"Read1",
+        "Read1.a": "Accept",
+        "Read1.b": "Accept",
+        "Read1.ε": "Reject",
+    },
+    ["Read1"],
+    ["Start","Accept","Reject"],
+
+)
+export const prob2_pda = new PDA(
+    {
+        "Start":"Read1",
+        "Read1.0": "Read2",
+        "Read1.1": "Read2",
+        "Read1.ε": "Reject",
+        "Read2.0": "Read4",
+        "Read2.1": "Read3",
+        "Read3.0": "Read5",
+        "Read3.1": "Read6",
+        "Read4.0": "Read8",
+        "Read4.1": "Read7",
+        "Read5.0": "Read8",
+        "Read5.1": "Read9",
+        "Read6.0": "Read5",
+        "Read6.1": "Read9",
+        "Read7.0": "Read5",
+        "Read7.1": "Read6",
+        "Read8.0": "Read3",
+        "Read8.1": "Read9",
+        "Read9.0": "Read9",
+        "Read9.1": "Read9",
+        "Read9.ε": "Accept",
+    },
+    ["Read1","Read2","Read3","Read4","Read5","Read6","Read7","Read8","Read9"],
+    ["Start","Accept","Reject"],
+    )
+    

@@ -13,7 +13,7 @@ const BackgroundText = ({text}:{text:string}) => {
         <>
           <motion.h1 
             style={{y}}
-          className="select-none absolute dark:text-[#90cbfc0c] text-[#1a252e0c] font-bold text-[20rem]">{text}</motion.h1>
+          className="-z-10 select-none absolute dark:text-[#90cbfc0c] text-[#1a252e0c] font-bold sm:text-[13rem] md:text-[16rem] lg:text-[20rem]">{text}</motion.h1>
         </>
     )
 }

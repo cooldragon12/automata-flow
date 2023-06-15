@@ -4,6 +4,7 @@ import TitleProblem from "@/components/TitleProblem";
 
 import HoverMenu from "@/components/HoverMenu";
 import CFGBoard from "@/components/CFG/Board";
+import PDABoard from "@/components/PDA/Board";
 import BackgroundText from "@/components/BackgroundText";
 
 
@@ -20,14 +21,14 @@ export default function Home() {
           <div className="overflow-visible w-[65%] relative h-[100%]">
             <Board />
           </div>
-          <div className="absolute">
+          <div className="absolute left-0">
 
             <BackgroundText text="DFA"/>
           </div>
           
           
       </div>
-      <div id="cfg" className="py-1 overflow-hidden flex items-center justify-between relative w-[100%] h-[100vh]">
+      <div id="cfg" className="select-none py-1 overflow-hidden flex justify-center items-center relative w-[100%] h-[100vh]">
         <div className="flex w-[50%] flex-col">
           <CFGBoard/>
         </div>
@@ -36,8 +37,13 @@ export default function Home() {
         </div>
           
       </div>
-      <div id="pda" className="py-1 overflow-hidden flex  items-center justify-between relative  w-[100%] h-[100vh]">
-
+      <div id="pda" className="py-1 overflow-visible flex  justify-center items-center relative  w-[100%] h-[100vh]">
+        <div className="flex w-[50%] h-[100%] flex-col">
+          <PDABoard/>
+        </div>
+        <div className="absolute -top-20 -left-0">
+          <BackgroundText text="PDA"/>
+        </div>
       </div>
 
     </main>

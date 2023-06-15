@@ -10,8 +10,8 @@ export const metadata = {
     children: React.ReactNode
   }) {
     return (
-      <section>
+      <>
         {children}
-      </section>
+      </>
     )
   }

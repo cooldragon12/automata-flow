@@ -46,7 +46,6 @@
     --error-color: #C0392B;
   }
 }
-
 body {
   color: var(--text-color);
   background-color: var(--background-color);

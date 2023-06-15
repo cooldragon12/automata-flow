@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+// const plugin = require('tailkwindcss/plugin');
 module.exports = {
   darkMode: 'class',
   content: [
@@ -25,5 +26,29 @@ module.exports = {
       }
     },
   },
-  plugins: [],
+  plugins: [
+    // plugin(function ({ addComponents }) {
+      
+    //   addComponents({
+    //     '.triangle': {
+    //       width: 0,
+    //       height: 0,
+    //       border: "50px solid transparent",
+    //       borderBottomColor: 'red',
+    //       position: relative,
+    //       top: '-50px',
+    //       '&:after':{
+    //           content: '',
+    //           position: 'absolute',
+    //           left: '-50px',
+    //           top: '50px',
+    //           width: 0,
+    //           height: 0,
+    //           border: '50px solid transparent',
+    //           borderTopColor: red,
+    //         }
+    //     }
+    //   })
+    // })
+  ],
 }
