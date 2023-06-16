@@ -67,11 +67,16 @@ export const prob2_cfg = new CFG(
 export const prob1_pda = new PDA(
     {
         "Start":"Read1",
-        "Read1.a": "Accept",
-        "Read1.b": "Accept",
-        "Read1.ε": "Reject",
+        "Read1.a": "read2",
+        "Read1.b": "Read3",
+        "Read2.a": "Read5",
+        "Read2.b": "Reject",
+        "Read3.b": "Read6",
+        "Read3.a": "Reject",
+        "Read5.a": "Accept",
+        "Read5.b": "Accept",
     },
-    ["Read1"],
+    ["Read1","Read2","Read3","Read4","Read5","Read6"],
     ["Start","Accept","Reject"],
 
 )
