@@ -101,7 +101,7 @@ export class DFA {
       
     let q = this.q0; // "q0"
     this.path.push(q);
-    while (w != "" && this.Q.includes(q)) {
+    while (w != "" && this.Q.includes(q) && q != "qT") {
       q = this.delta[`${q}.${w[0]}`]; // "q0.a": "q1"
       this.path.push(q); 
       w = w.slice(1);
