@@ -29,7 +29,7 @@ export default function Home() {
           
       </div>
       <div id="cfg" className="select-none py-1 overflow-hidden flex justify-center items-center relative w-[100%] h-[100vh]">
-        <div className="flex w-[50%] flex-col">
+        <div className="flex w-[70%] flex-col">
           <CFGBoard/>
         </div>
         <div className="absolute">

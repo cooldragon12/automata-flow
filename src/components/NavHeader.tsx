@@ -23,10 +23,10 @@ const NavHeader = () => {
                     <a href="#dfa">DFA</a>
                 </li>
                 <li className="mr-6 hover:text-accent">
-                    <a href="#pda">PDA</a>
+                    <a href="#cfg">CFG</a>
                 </li>
                 <li className="mr-6 hover:text-accent">
-                    <a href="#cfg">CFG</a>
+                    <a href="#pda">PDA</a>
                 </li>
                 <li className="mr-6 hover:text-accent">
                     <a href="/about">About</a>
