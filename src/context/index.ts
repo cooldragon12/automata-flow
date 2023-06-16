@@ -15,6 +15,7 @@ export const prob1 = new DFA(
         "q5.a":"q8", "q5.b":"q8",
         "q6.a":"q8", "q6.b":"q8",
         "q7.a":"q8", "q7.b":"q8",
+        "q8.a":"q8", "q8.b":"q8",
         "qT.a":"qT", "qT.b":"qT"
     }
 );
@@ -67,14 +68,18 @@ export const prob2_cfg = new CFG(
 export const prob1_pda = new PDA(
     {
         "Start":"Read1",
-        "Read1.a": "read2",
+        "Read1.a": "Read2",
         "Read1.b": "Read3",
-        "Read2.a": "Read5",
+        "Read2.a": "Read4",
         "Read2.b": "Reject",
         "Read3.b": "Read6",
         "Read3.a": "Reject",
+        "Read4.a": "Read5",
+        "Read4.b": "Read5",
         "Read5.a": "Accept",
         "Read5.b": "Accept",
+        "Read6.a": "Read5",
+        "Read6.b": "Read5",
     },
     ["Read1","Read2","Read3","Read4","Read5","Read6"],
     ["Start","Accept","Reject"],

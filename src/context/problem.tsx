@@ -48,6 +48,7 @@ const reducer = (state: IProblemState, action: IProblemAction) => {
         case 'SIMULATE':
             
             state.dfa.execute(state.currentInput);
+            state.pda.getStack(state.currentInput);
             return {
                 ...state,
                 validation:{
@@ -113,9 +114,7 @@ export const ProblemProvider = ({children}: {children: React.ReactNode}) => {
     useEffect(()=>{
         console.log("Problem Context: selected - ", state.selection, "_", state.problem);
     }, [state.problem, state.selection]);
-    useEffect(()=>{
-        console.log("Problem Context: currentInput - ", state.currentInput)
-    }, [state.currentInput]);
+    
     
     return (
         <ProblemContext.Provider value={{state, dispatch}}>

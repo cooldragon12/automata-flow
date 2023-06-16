@@ -82,6 +82,8 @@ const DFA1 = ({theme, state}: {theme:string, state: IProblemState}) => {
                 <div className={`absolute flex justify-center items-center top-[30%] right-[0rem]`}>
                     <State id={'q8'} state={'q8'} finalState={state.dfa.F.includes('q8')} valid={checkValid('q8')}/>
                 </div>
+                <Xarrow _cpy1Offset={100}  _cpx2Offset={200} _cpx1Offset={200} endAnchor={'right'} startAnchor={'bottom'}  strokeWidth={3} zIndex={-100} labels="b,a" path='smooth' 
+                        animateDrawing color={theme=== 'Dark'? "#3498DB":"gray"} key={'q8.ab'} start={'q8'} end={'q8'} />
                 {/* QT */}
                 <div className={`absolute flex justify-center items-center top-[30%] left-[25rem]`}>
                     <State id={'qT'} state={'T'} finalState={state.dfa.F.includes('qT')} valid={checkValid('qT')}/>

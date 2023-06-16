@@ -11,32 +11,46 @@ export class PDA {
 
     public transition: {[key:string]: string}
 
-    public path: string[]
+    public stack: string[]
 
 
     constructor(transition: {[key:string]: string}, action: string[], NonTerminal: string[]) {
         this.transition = transition
-        this.path = []
+        this.stack = []
         this.action = action
         this.NonTerminal = NonTerminal
     }
     
 
-    getPath(input:string): string[] {
-        if (this.path.length >= 0) this.path = []
-        
-        let state = "Start"
-        this.path.push(state)
+    getStack(input:string): string[] {
+        if (this.stack.length >= 0) this.stack = []
 
-        for (let i = 0; i < input.length; i++) {
-            let key = state + "." + input[i]
+        let state = "Start"
+        this.stack.push(state)
+        state = "Read1"
+        this.stack.push(state)
+
+        while (input.length >= 0) {
+            if (input.length === 0) {
+                let key = state + "." + "ε"
+                if (this.transition[key] === undefined) {
+                    return this.stack
+                }
+                state = this.transition[key]
+                this.stack.push(state)
+                return this.stack
+            }
+            let key = state + "." + input[0]
+
             if (this.transition[key] === undefined) {
-                return this.path
+                
+                return this.stack
             }
             state = this.transition[key]
-            this.path.push(state)
+            this.stack.push(state)
+            input = input.slice(1)
         }   
-        return this.path
+        return this.stack
     }
 
 
