@@ -17,7 +17,7 @@ export default function Home() {
       {/* Main Content */}
       <TitleProblem/>
 
-      <div id="dfa" className="py-1 relative overflow-hidden flex justify-center items-center  w-[100%] h-[86vh]">
+      <div id="dfa" className="py-1 relative overflow-hidden flex justify-center items-center  w-[100%] h-[100vh]">
           <div className="overflow-visible w-[65%] relative h-[100%]">
             <Board />
           </div>

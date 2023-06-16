@@ -13,7 +13,7 @@ export const ProblemContext = createContext({} as IProblemContext);
 
 export interface IProblemState{
     selection: "1"|"2"|string;
-    problem?: "(aa+bb)(a+b)*(a+b+ab+ba)+(a+b+ab+ba)*(aa+bab)*(a+b+aa)(a+b+bb+aa)*"|"((101)+(111)*+(100)+(1+0+11)*)(1+0+01)*(111+000+101)(1+0)*"|string;
+    problem?: "(aa+bb)(a+b)*(a+b+ab+ba)(a+b+ab+ba)*(aa+bab)*(a+b+aa)(a+b+bb+aa)*"|"((101)+(111)*+(100)+(1+0+11)*)(1+0+01)*(111+000+101)(1+0)*"|string;
     dfa: DFA;
     cfg: CFG;
     pda: PDA;
@@ -41,7 +41,7 @@ const reducer = (state: IProblemState, action: IProblemAction) => {
         case 'SELECT':
             return {...state, 
                 selection: action.payload.selection, 
-                problem: action.payload.selection === "1" ? "(aa+bb)(a+b)*(a+b+ab+ba)+(a+b+ab+ba)*(aa+bab)*(a+b+aa)(a+b+bb+aa)*" : "((101)+(111)*+(100)+(1+0+11)*)(1+0+01)*(111+000+101)(1+0)*",
+                problem: action.payload.selection === "1" ? "(aa+bb)(a+b)*(a+b+ab+ba)(a+b+ab+ba)*(aa+bab)*(a+b+aa)(a+b+bb+aa)*" : "((101)+(111)*+(100)+(1+0+11)*)(1+0+01)*(111+000+101)(1+0)*",
                 dfa: action.payload.selection=== "1"? prob1: prob2,
                 cfg: action.payload.selection=== "1"? prob1_cfg: prob2_cfg,
                 pda: action.payload.selection=== "1"? prob1_pda: prob2_pda,};
@@ -94,7 +94,7 @@ const reducer = (state: IProblemState, action: IProblemAction) => {
 export const ProblemProvider = ({children}: {children: React.ReactNode}) => {
     const initialState: IProblemState = {
         selection: "1",
-        problem: "(aa+bb)(a+b)*(a+b+ab+ba)+(a+b+ab+ba)*(aa+bab)*(a+b+aa)(a+b+bb+aa)*",
+        problem: "(aa+bb)(a+b)*(a+b+ab+ba)(a+b+ab+ba)*(aa+bab)*(a+b+aa)(a+b+bb+aa)*",
         dfa: prob1,
         cfg: prob1_cfg,
         pda: prob1_pda,
