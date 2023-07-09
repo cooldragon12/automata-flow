@@ -1,4 +1,5 @@
 <img src="/src/app/opengraph-image.png" alt="banner-automata-flow"/>
+
 # AutomataFlow
 AutomataFlow is a web application that simulates a Deterministic Finite Automaton (DFA) based on a given regular expression problem. It also includes support for Pushdown Automata (PDA) and Context-Free Grammars (CFG). The DFA diagram in the application is interactive, allowing you to validate or simulate input strings.
 
