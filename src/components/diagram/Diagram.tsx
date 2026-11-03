@@ -26,6 +26,7 @@ type DiagramProps = {
 };
 
 type Offset = { x: number; y: number };
+const NO_OFFSETS: Record<string, Offset> = {};
 
 const Diagram = ({ title, layout: baseLayout, edges, finals = [], trace, frame, active, stepKey, stepMs }: DiagramProps) => {
     const uid = useId().replace(/:/g, "");
@@ -38,27 +39,31 @@ const Diagram = ({ title, layout: baseLayout, edges, finals = [], trace, frame, 
 
     // ---- dragging: nodes follow the pointer, edges are recomputed from the same coordinates, then spring home
     const svgRef = useRef<SVGSVGElement>(null);
-    const [offsets, setOffsets] = useState<Record<string, Offset>>({});
-    const offsetsRef = useRef(offsets);
-    offsetsRef.current = offsets;
+    // Offsets belong to the layout they were dragged in, so switching problem or orientation resets them.
+    const [dragged, setDragged] = useState<{ layout: Layout; offsets: Record<string, Offset> }>({ layout, offsets: {} });
+    const offsets = dragged.layout === layout ? dragged.offsets : NO_OFFSETS;
+    const offsetsRef = useRef<Record<string, Offset>>({});
+    const setOffset = useCallback((id: string, o: Offset) => {
+        offsetsRef.current = { ...offsetsRef.current, [id]: o };
+        setDragged({ layout, offsets: offsetsRef.current });
+    }, [layout]);
     const drag = useRef<{ id: string; x: number; y: number; scale: number } | null>(null);
     const springs = useRef<Record<string, AnimationPlaybackControls>>({});
 
-    useEffect(() => setOffsets({}), [layout]);
-
     const onPointerDown = useCallback((e: React.PointerEvent, id: string) => {
+        if (dragged.layout !== layout) offsetsRef.current = {};
         const ctm = svgRef.current?.getScreenCTM();
         springs.current[id]?.stop();
         const o = offsetsRef.current[id] ?? { x: 0, y: 0 };
         const scale = ctm ? 1 / ctm.a : 1;
         drag.current = { id, x: e.clientX - o.x / scale, y: e.clientY - o.y / scale, scale };
         (e.currentTarget as Element).setPointerCapture(e.pointerId);
-    }, []);
+    }, [dragged.layout, layout]);
     const onPointerMove = useCallback((e: React.PointerEvent) => {
         const d = drag.current;
         if (!d) return;
-        setOffsets((o) => ({ ...o, [d.id]: { x: (e.clientX - d.x) * d.scale, y: (e.clientY - d.y) * d.scale } }));
-    }, []);
+        setOffset(d.id, { x: (e.clientX - d.x) * d.scale, y: (e.clientY - d.y) * d.scale });
+    }, [setOffset]);
     const onPointerUp = useCallback(() => {
         const d = drag.current;
         drag.current = null;
@@ -67,9 +72,9 @@ const Diagram = ({ title, layout: baseLayout, edges, finals = [], trace, frame, 
         if (!from) return;
         springs.current[d.id] = animate(1, 0, {
             type: "spring", stiffness: 260, damping: 20,
-            onUpdate: (v) => setOffsets((o) => ({ ...o, [d.id]: { x: from.x * v, y: from.y * v } })),
+            onUpdate: (v) => setOffset(d.id, { x: from.x * v, y: from.y * v }),
         });
-    }, []);
+    }, [setOffset]);
     useEffect(() => () => Object.values(springs.current).forEach((s) => s.stop()), []);
 
     const placed = useMemo(() => {

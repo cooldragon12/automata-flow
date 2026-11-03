@@ -1,10 +1,5 @@
 "use client"
-import React, {useState, createContext, useEffect, useCallback} from "react";
-
-
-
-
-export const ThemeContext = createContext({} as ITheme);
+import React, { createContext, useCallback, useEffect, useSyncExternalStore } from "react";
 
 type ThemeMode = "Light" | "Dark";
 export interface ITheme{
@@ -12,47 +7,48 @@ export interface ITheme{
     toggle: ()=>void;
 }
 
+export const ThemeContext = createContext({} as ITheme);
+
+const DARK_QUERY = "(prefers-color-scheme: dark)";
+const listeners = new Set<() => void>();
+
+const getUserTheme = (): ThemeMode | null => {
+    try {
+        const stored = localStorage.getItem("theme");
+        return stored === "Dark" || stored === "Light" ? stored : null;
+    } catch {
+        return null;
+    }
+};
+
+/** The saved choice wins; otherwise follow the system setting. */
+const readTheme = (): ThemeMode =>
+    getUserTheme() ?? (window.matchMedia(DARK_QUERY).matches ? "Dark" : "Light");
+
+const subscribe = (onChange: () => void) => {
+    const mql = window.matchMedia(DARK_QUERY);
+    listeners.add(onChange);
+    mql.addEventListener("change", onChange);
+    return () => {
+        listeners.delete(onChange);
+        mql.removeEventListener("change", onChange);
+    };
+};
 
 export const ThemeProvider = ({children}: {children: React.ReactNode}) => {
-    const [theme, modeChange] = useState<ThemeMode>("Light");
+    const theme = useSyncExternalStore(subscribe, readTheme, () => "Light" as ThemeMode);
 
-    const getUserTheme = ()=>{
-        return localStorage.getItem("theme") as ThemeMode;
-    }
+    useEffect(() => {
+        document.documentElement.classList.toggle("dark", theme === "Dark");
+    }, [theme]);
 
-    const getSystemTheme = ()=>{
-        const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
-        return systemTheme.matches;
-    }
+    const toggle = useCallback(() => {
+        try {
+            localStorage.setItem("theme", theme === "Light" ? "Dark" : "Light");
+        } catch {}
+        listeners.forEach((l) => l());
+    }, [theme]);
 
-    const toggle = ()=>{
-        if (document.documentElement.classList.contains("dark")){
-            localStorage.setItem("theme", "Light");
-            document.documentElement.classList.remove("dark");
-            modeChange("Light");
-            return;
-        }
-        document.documentElement.classList.add("dark");
-        localStorage.setItem("theme", "Dark");
-        modeChange("Dark");
-    }
-    const getTheme = useCallback(()=>{
-        const userTheme = getUserTheme();
-        const systemTheme = getSystemTheme();
-        if (userTheme === "Dark" || (systemTheme && !userTheme)){
-            document.documentElement.classList.add("dark");
-            modeChange("Dark");
-            return; 
-        }
-    }, []);
-
-    useEffect(()=>{
-        getTheme();
-        return ()=>{
-            getTheme();
-        };
-    }, [theme, getTheme]);
-    
     return (
         <ThemeContext.Provider value={{theme, toggle}}>
             {children}
