@@ -26,14 +26,13 @@ export const ThemeProvider = ({children}: {children: React.ReactNode}) => {
     }
 
     const toggle = ()=>{
-        modeChange(theme === "Light" ? "Dark" : "Light");
         if (document.documentElement.classList.contains("dark")){
             localStorage.setItem("theme", "Light");
             document.documentElement.classList.remove("dark");
             modeChange("Light");
             return;
         }
-        document.documentElement.classList.add("Dark");
+        document.documentElement.classList.add("dark");
         localStorage.setItem("theme", "Dark");
         modeChange("Dark");
     }

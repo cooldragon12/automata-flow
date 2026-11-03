@@ -1,93 +1,115 @@
 "use client"
 
 import { useProblem } from "@/context/problem";
-import {  useEffect, useCallback } from "react";
-import {AiFillCheckCircle, AiFillCloseCircle} from "react-icons/ai";
+import { useEffect, useRef } from "react";
+import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
+import { BsArrowCounterclockwise, BsPauseFill, BsPlayFill, BsSkipEndFill } from "react-icons/bs";
+
+const SPEEDS = [
+  { label: "0.5×", ms: 1600 },
+  { label: "1×", ms: 900 },
+  { label: "2×", ms: 450 },
+];
+
+const iconButton = "grid place-items-center h-11 w-10 sm:w-11 shrink-0 rounded-xl border border-black/15 dark:border-white/15 transition-colors hover:bg-black/5 dark:hover:bg-white/10 disabled:opacity-40 disabled:pointer-events-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent";
 
 const HoverMenu = () => {
-  const {state, dispatch} = useProblem();
-  const validateHandler = useCallback(() => {
-    dispatch({type:"VALIDATE"})
-  }, [dispatch])
-  const stopValidationHandler = useCallback(()=>{
-    dispatch({type:"VALIDATING"})
-  }, [dispatch])
-  const simulateHandler = useCallback(() => {
-    dispatch({type:"SIMULATE"})
-  }, [dispatch])
-  const nextStepHandler = useCallback(() => {
-    dispatch({type:"NEXT_STEP"})
-  }, [dispatch])
-  const stopSimulationHandler = useCallback(() => {
-    dispatch({type:"STOP_SIMULATION"})
-  }, [dispatch])
-  
-  useEffect(()=>{
-    if (state.validation.validating)
-      stopValidationHandler()
-    return () => {
-      stopValidationHandler()
-    }
-  }, [state.validation.validating, stopValidationHandler])
-  useEffect(() => { // Play sound on valid/invalid
-    const audio1 = new Audio("/sound/ping.mp3");
-    const audio2 = new Audio("/sound/error.mp3");
-    if (state.validation.valid === true)
-      audio1.play();
-    else if (state.validation.valid === false)
-      audio2.play();
-    console.log(state.validation.valid)
-  }, [state.validation.valid])
+  const { state, dispatch, total, result } = useProblem();
+  const { status, tick, speed } = state.simulation;
+  const alphabet = state.dfa.Sigma;
+  const playing = status === "playing";
 
+  // Play a sound once each time a run finishes.
+  const sounds = useRef<{ ok: HTMLAudioElement; bad: HTMLAudioElement } | null>(null);
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      if ((state.dfa.path.length > state.simulation.step) && state.simulation.step != -1)
-        nextStepHandler()
-      else
-        if (state.simulation.simulating)
-        stopSimulationHandler()
-    }, 1000);
-    return () => {
-      clearTimeout(timeout); 
-    }
-    console.log("Steps: ",state.simulation.step," out ",state.dfa.path.length-1)
-  }, [state.simulation.step, nextStepHandler, state.dfa.path.length, state.simulation.simulating, stopSimulationHandler])
+    sounds.current = { ok: new Audio("/sound/ping.mp3"), bad: new Audio("/sound/error.mp3") };
+  }, []);
+  useEffect(() => {
+    if (result === null || !sounds.current) return;
+    const audio = result ? sounds.current.ok : sounds.current.bad;
+    audio.currentTime = 0;
+    audio.play().catch(() => {});
+  }, [result]);
 
-  
-  return(
-    <>
-      <menu className={`flex justify-center border border-text_color dark:border-primary rounded-md fixed shadow-background 
-                        bottom-[9%] 
-                        lg:left-[30%] backdrop-blur-md backdrop-brightness-120 w-[90vw] lg:w-[40vw] h-20 z-10`}>
-          <div className="flex justify-center items-center outline-inherit border-inherit relative">
-            <select 
-              name="problem-selection" 
-              placeholder='Expression' value={state.selection} 
-              onChange={(e)=>dispatch({type: 'SELECT', payload:{selection:e.target.value}})} 
-              className="dark:bg-dark_background bg-inherit border border-inherit rounded-lg p-3 m-2 focus-visible:outline-inherit flex-[0.8] transition-color" >
-              <option value="1">Problem 1</option>
-              <option value="2">Problem 2</option>
-            </select>
-          </div>
+  const onInput = (value: string) => {
+    // Only symbols from the problem's alphabet can be typed.
+    const filtered = value.split("").filter((c) => alphabet.includes(c)).join("");
+    dispatch({ type: "ENTERED_INPUT", payload: { currentInput: filtered } });
+  };
 
-          <div className="flex justify-center items-center outline-inherit border-inherit relative w-[35em]">
-            {
-              state.validation.valid === null ? <></>: state.validation.valid ? 
-              <AiFillCheckCircle className="text-2xl text-success absolute right-3"/> : 
-              <AiFillCloseCircle className="text-2xl text-danger absolute right-3"/>
-            }
-            <input 
-              onChange={(e)=>dispatch({type:"ENTERED_INPUT",payload:{currentInput:e.target.value}})} 
-              disabled={state.simulation.simulating} type="text" placeholder='String or Input' 
-              className={`bg-inherit border border-inherit rounded-lg p-3 m-2 w-[100%] focus-within:outline-none focus-visible:outline-inherit ${state.validation.valid != null? state.validation.valid? "text-success": "text-danger":""}`} />
+  const progress = status === "idle" || total <= 1 ? 0 : tick / (total - 1);
+
+  return (
+    <menu
+      className="fixed z-20 inset-x-3 mx-auto max-w-3xl bottom-[max(0.75rem,env(safe-area-inset-bottom))] m-0 p-0 list-none
+                 rounded-2xl border border-black/10 dark:border-white/15 bg-background/80 dark:bg-dark_background/80
+                 backdrop-blur-md shadow-lg overflow-hidden">
+      <div className="h-1 bg-black/5 dark:bg-white/10" aria-hidden>
+        <div className={`h-full transition-[width] ease-linear ${result === false ? "bg-danger" : result ? "bg-success" : "bg-accent"}`}
+          style={{ width: `${progress * 100}%`, transitionDuration: playing ? `${speed}ms` : "200ms" }} />
+      </div>
+
+      <div className="flex flex-col md:flex-row gap-2 p-2 sm:p-3">
+        <div className="flex gap-2 flex-1 min-w-0">
+          <select
+            aria-label="Problem"
+            value={state.selection}
+            onChange={(e) => dispatch({ type: "SELECT", payload: { selection: e.target.value as "1" | "2" } })}
+            className="h-11 shrink-0 rounded-xl border border-black/15 dark:border-white/15 bg-transparent dark:bg-dark_background px-2 text-base md:text-sm">
+            <option value="1">Problem 1</option>
+            <option value="2">Problem 2</option>
+          </select>
+
+          <div className="relative flex-1 min-w-0">
+            <input
+              aria-label="Input string"
+              value={state.currentInput}
+              onChange={(e) => onInput(e.target.value)}
+              type="text" inputMode={alphabet.every((c) => /\d/.test(c)) ? "numeric" : "text"}
+              autoCapitalize="off" autoComplete="off" autoCorrect="off" spellCheck={false}
+              placeholder={`String over {${alphabet.join(", ")}}`}
+              onKeyDown={(e) => { if (e.key === "Enter") dispatch({ type: "VALIDATE", total }); }}
+              className={`h-11 w-full rounded-xl border border-black/15 dark:border-white/15 bg-transparent pl-3 pr-10 font-mono
+                          text-base focus:outline-none focus-visible:ring-2 focus-visible:ring-accent
+                          ${result === null ? "" : result ? "text-success" : "text-danger"}`} />
+            {result !== null && (result
+              ? <AiFillCheckCircle aria-label="Accepted" className="text-2xl text-success absolute right-3 top-1/2 -translate-y-1/2" />
+              : <AiFillCloseCircle aria-label="Rejected" className="text-2xl text-danger absolute right-3 top-1/2 -translate-y-1/2" />)}
           </div>
-          <div className="flex gap-0">
-            <button type="button" onClick={validateHandler} disabled={state.simulation.simulating} className="text-sm hover:tracking-wider bg-inherit border border-inherit rounded-lg p-3 m-2 w-[50%] focus-visible:outline-inherit transition-all hover:bg-secondary hover:text-dark_text_color hover:drop-shadow-md hover:dark:drop-shadow-[0_4px_3px_rgba(231,76,60,.25)] disabled:hover:tracking-normal disabled:hover:drop-shadow-none disabled:bg-[#acabab44] disabled:text-slate-500">VALIDATE</button>
-            <button type="button" onClick={simulateHandler} disabled={state.simulation.simulating} className="text-sm hover:tracking-wider bg-inherit border border-inherit rounded-lg p-3 m-2 w-[50%] focus-visible:outline-inherit transition-all hover:bg-accent hover:text-dark_text_color hover:drop-shadow-md  hover:dark:drop-shadow-[0_4px_3px_rgba(52,152,219,.25)] disabled:hover:tracking-normal disabled:hover:drop-shadow-none disabled:bg-[#acabab44] disabled:text-slate-500">SIMULATE</button>
-          </div>
-      </menu>
-    </>
-    )
-}
+        </div>
+
+        <div className="flex gap-1.5 sm:gap-2 items-center">
+          <button type="button" onClick={() => dispatch({ type: "VALIDATE", total })}
+            className="h-11 flex-1 md:flex-none min-w-0 px-2 sm:px-4 rounded-xl border border-black/15 dark:border-white/15 text-[13px] sm:text-sm font-semibold tracking-wide transition-colors hover:bg-secondary hover:border-secondary hover:text-white">
+            VALIDATE
+          </button>
+          <button type="button" onClick={() => dispatch({ type: playing ? "PAUSE" : "PLAY", total })}
+            aria-label={playing ? "Pause" : "Simulate"}
+            className="h-11 flex-1 md:flex-none min-w-0 px-2 sm:px-4 rounded-xl bg-accent text-white text-[13px] sm:text-sm font-semibold tracking-wide inline-flex items-center justify-center gap-1 transition-opacity hover:opacity-90">
+            {playing ? <BsPauseFill className="text-lg shrink-0" /> : <BsPlayFill className="text-lg shrink-0" />}
+            {playing ? "PAUSE" : status === "paused" ? "RESUME" : "SIMULATE"}
+          </button>
+          <button type="button" aria-label="Step forward" title="Step" className={iconButton}
+            disabled={playing} onClick={() => dispatch({ type: "STEP", total })}>
+            <BsSkipEndFill className="text-lg" />
+          </button>
+          <button type="button" aria-label="Reset" title="Reset" className={iconButton}
+            disabled={status === "idle"} onClick={() => dispatch({ type: "RESET", total })}>
+            <BsArrowCounterclockwise className="text-lg" />
+          </button>
+          <button type="button" title="Speed"
+            aria-label={`Speed ${SPEEDS.find((s) => s.ms === speed)?.label}`}
+            className={`${iconButton} text-xs font-semibold`}
+            onClick={() => {
+              const i = SPEEDS.findIndex((s) => s.ms === speed);
+              dispatch({ type: "SET_SPEED", payload: { speed: SPEEDS[(i + 1) % SPEEDS.length].ms } });
+            }}>
+            {SPEEDS.find((s) => s.ms === speed)?.label}
+          </button>
+        </div>
+      </div>
+    </menu>
+  );
+};
 
 export default HoverMenu;

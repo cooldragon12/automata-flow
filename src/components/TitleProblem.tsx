@@ -1,17 +1,23 @@
 "use client"
 
 import { useProblem } from "@/context/problem";
-import { animate, motion} from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+
 const TitleProblem = () => { 
     const {state} = useProblem();
-    // animate("h1", {},{})
-    
     return(
-        <motion.div 
-            className="flex flex-col items-center justify-center select-none overflow-hidden relative w-[100%] md:h-[8em] sm:text-sm sm:h-[12em] h-[5em] lg:h-[8em] xl:h-[5em] group">
-            <motion.h1 className="problem-description text-4xl font-bold text-center top-[-10em] lg:-top-15  absolute group-hover:top-0 transition-all">{state.problem}</motion.h1>
-            <motion.h1 className="problem-label text-4xl font-bold text-center absolute bottom-1 lg:bottom-0 group-hover:-bottom-10 transition-all">Problem {state.selection}:</motion.h1 >
-        </motion.div>
+        <div className="w-full max-w-6xl flex flex-col items-center text-center gap-3 py-6 md:py-10">
+            <AnimatePresence mode="wait" initial={false}>
+                <motion.div key={state.selection} className="flex flex-col items-center gap-3 w-full"
+                    initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.2 }}>
+                    <h1 className="text-3xl md:text-4xl font-bold">Problem {state.selection}</h1>
+                    <p className="font-mono text-sm sm:text-base md:text-lg break-all rounded-xl border border-black/10 dark:border-white/10 bg-[var(--dg-canvas)] px-4 py-3 max-w-full">
+                        {state.problem}
+                    </p>
+                </motion.div>
+            </AnimatePresence>
+        </div>
     )
 }
 export default TitleProblem;

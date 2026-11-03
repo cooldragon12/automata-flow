@@ -7,45 +7,36 @@ import CFGBoard from "@/components/CFG/Board";
 import PDABoard from "@/components/PDA/Board";
 import BackgroundText from "@/components/BackgroundText";
 
-
+const Section = ({ id, title, subtitle, children }: { id: string, title: string, subtitle: string, children: React.ReactNode }) => (
+  <section id={id} className="relative w-full max-w-6xl scroll-mt-6 py-10 md:py-16 md:min-h-screen flex flex-col justify-center">
+    <div className="absolute inset-0 flex items-center justify-start overflow-hidden pointer-events-none" aria-hidden>
+      <BackgroundText text={title}/>
+    </div>
+    <header className="mb-4 md:mb-6">
+      <h2 className="text-2xl md:text-3xl font-bold">{title}</h2>
+      <p className="text-sm md:text-base opacity-70">{subtitle}</p>
+    </header>
+    {children}
+  </section>
+)
 
 export default function Home() { 
   return (
-    <main className="flex min-h-screen flex-col items-center px-24 py-20">
-      {/* Hover */}
+    <main className="flex min-h-screen flex-col items-center px-4 sm:px-8 lg:px-24 pt-4 md:pt-10 pb-48 md:pb-32">
       <HoverMenu/>
-      {/* Main Content */}
       <TitleProblem/>
 
-      <div id="dfa" className="py-1 relative overflow-hidden flex justify-center items-center  w-[100%] h-[100vh]">
-          <div className="overflow-visible w-[65%] relative h-[100%]">
-            <Board />
-          </div>
-          <div className="absolute left-0">
-
-            <BackgroundText text="DFA"/>
-          </div>
-          
-          
-      </div>
-      <div id="cfg" className="select-none py-1 overflow-hidden flex justify-center items-center relative w-[100%] h-[100vh]">
-        <div className="flex w-[70%] flex-col">
-          <CFGBoard/>
-        </div>
-        <div className="absolute">
-          <BackgroundText text="CFG"/>
-        </div>
-          
-      </div>
-      <div id="pda" className="py-1 overflow-visible flex  justify-center items-center relative  w-[100%] h-[100vh]">
-        <div className="flex w-[50%] h-[100%] flex-col">
+      <Section id="dfa" title="DFA" subtitle="Deterministic finite automaton. Drag a state to move it.">
+        <Board />
+      </Section>
+      <Section id="cfg" title="CFG" subtitle="Context-free grammar that generates the same language.">
+        <CFGBoard/>
+      </Section>
+      <Section id="pda" title="PDA" subtitle="Pushdown automaton as a flowchart.">
+        <div className="w-full max-w-2xl mx-auto">
           <PDABoard/>
         </div>
-        <div className="absolute -top-20 -left-0">
-          <BackgroundText text="PDA"/>
-        </div>
-      </div>
-
+      </Section>
     </main>
   )
 }

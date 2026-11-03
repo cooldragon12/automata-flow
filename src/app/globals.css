@@ -50,3 +50,89 @@ body {
   color: var(--text-color);
   background-color: var(--background-color);
 } */
+
+/* ---------- Automaton diagrams ---------- */
+:root {
+  --dg-canvas: #FFFFFF;
+  --dg-ink: #2C3E50;
+  --dg-edge: #9AA5B1;
+  --dg-active: #3498DB;
+  --dg-ok: #27AE60;
+  --dg-bad: #C0392B;
+}
+.dark {
+  --dg-canvas: #232F38;
+  --dg-ink: #F2F5F7;
+  --dg-edge: #5E7487;
+}
+
+.dg-edge {
+  fill: none;
+  stroke: var(--dg-edge);
+  stroke-width: 2.5;
+  transition: stroke .25s ease;
+}
+.dg-edge[data-status="visited"] { stroke: var(--dg-active); stroke-opacity: .55; }
+.dg-arrow-idle { fill: var(--dg-edge); }
+.dg-arrow-active { fill: var(--dg-active); }
+
+.dg-trail {
+  fill: none;
+  stroke: var(--dg-active);
+  stroke-width: 4.5;
+  stroke-linecap: round;
+}
+.dg-token { fill: var(--dg-active); stroke: var(--dg-canvas); stroke-width: 3; }
+
+.dg-label {
+  fill: var(--dg-ink);
+  font: 600 15px ui-monospace, SFMono-Regular, Menlo, monospace;
+  paint-order: stroke;
+  stroke: var(--dg-canvas);
+  stroke-width: 6px;
+  stroke-linejoin: round;
+  transition: fill .25s ease;
+  pointer-events: none;
+}
+.dg-label[data-status="current"] { fill: var(--dg-active); }
+
+.dg-node .dg-shape {
+  fill: var(--dg-canvas);
+  stroke: var(--dg-ink);
+  stroke-width: 3;
+  transition: fill .25s ease, stroke .25s ease;
+  transition-delay: var(--delay, 0ms);
+}
+.dg-node .dg-inner {
+  fill: none;
+  stroke: var(--dg-ink);
+  stroke-width: 2.5;
+  pointer-events: none;
+  transition: stroke .25s ease;
+  transition-delay: var(--delay, 0ms);
+}
+.dg-node .dg-ring { fill: none; stroke: var(--dg-active); stroke-width: 3; }
+.dg-node[data-status="accept"] .dg-ring { stroke: var(--dg-ok); }
+.dg-node[data-status="reject"] .dg-ring { stroke: var(--dg-bad); }
+.dg-node-label {
+  fill: var(--dg-ink);
+  font: 700 16px ui-sans-serif, system-ui, sans-serif;
+  pointer-events: none;
+  transition: fill .25s ease;
+  transition-delay: var(--delay, 0ms);
+}
+.dg-node:hover .dg-shape { stroke: var(--dg-active); }
+.dg-node[data-status="visited"] .dg-shape { stroke: var(--dg-active); }
+.dg-node[data-status="current"] .dg-shape { fill: var(--dg-active); stroke: var(--dg-active); }
+.dg-node[data-status="accept"] .dg-shape { fill: var(--dg-ok); stroke: var(--dg-ok); }
+.dg-node[data-status="reject"] .dg-shape { fill: var(--dg-bad); stroke: var(--dg-bad); }
+.dg-node:is([data-status="current"], [data-status="accept"], [data-status="reject"]) :is(.dg-node-label) { fill: #FFFFFF; }
+.dg-node:is([data-status="current"], [data-status="accept"], [data-status="reject"]) .dg-inner { stroke: #FFFFFF; }
+
+.scrollbar-none { scrollbar-width: none; }
+.scrollbar-none::-webkit-scrollbar { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { scroll-behavior: auto; }
+  .dg-edge, .dg-label, .dg-node .dg-shape, .dg-node .dg-inner, .dg-node-label { transition: none; }
+}

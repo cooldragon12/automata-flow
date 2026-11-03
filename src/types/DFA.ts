@@ -1,4 +1,19 @@
 /**
+ * @description One step of a run: the node the machine is in after reading `symbol` from `from`.
+ */
+export interface TraceFrame {
+  node: string
+  from?: string
+  symbol?: string
+  consumed: number
+}
+
+export interface Trace {
+  frames: TraceFrame[]
+  accepted: boolean
+}
+
+/**
  * @name Deterministic Finite Automaton
  * 
  * @description This class is used to create or construct a DFA. It has the following properties:
@@ -109,6 +124,21 @@ export class DFA {
     if (this.F.includes(q)) 
       return true;
     return false;
+  }
+  /**
+   * @description Pure step-by-step run used by the simulation. Unlike `execute`, it does not mutate `path`.
+   * @param w - input of the user
+   */
+  trace(w: string): Trace {
+    let q = this.q0;
+    const frames: TraceFrame[] = [{ node: q, consumed: 0 }];
+    for (let i = 0; i < w.length; i++) {
+      const next = this.delta[`${q}.${w[i]}`];
+      if (next === undefined) return { frames, accepted: false };
+      frames.push({ node: next, from: q, symbol: w[i], consumed: i + 1 });
+      q = next;
+    }
+    return { frames, accepted: this.F.includes(q) };
   }
 }
 

@@ -1,3 +1,5 @@
+import type { Trace, TraceFrame } from "./DFA"
+
 /**
  * @name Pushdown Automaton
  * @description A class representing a Pushdown Automaton
@@ -54,4 +56,23 @@ export class PDA {
     }
 
 
+    /**
+     * @description Pure step-by-step run used by the simulation. Halts on Accept/Reject or a missing transition.
+     */
+    trace(input: string): Trace {
+        const frames: TraceFrame[] = [{ node: "Start", consumed: 0 }]
+        let state = this.transition["Start"]
+        frames.push({ node: state, from: "Start", consumed: 0 })
+        let i = 0
+        while (!(this.NonTerminal as string[]).includes(state)) {
+            const symbol = i === input.length ? "ε" : input[i]
+            const next = this.transition[`${state}.${symbol}`]
+            if (next === undefined) break
+            if (symbol !== "ε") i++
+            frames.push({ node: next, from: state, symbol, consumed: i })
+            state = next
+            if (symbol === "ε") break
+        }
+        return { frames, accepted: state === "Accept" }
+    }
 }

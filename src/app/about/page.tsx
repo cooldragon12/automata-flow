@@ -12,67 +12,67 @@ import Member5 from "@/assets/about/avatar/9.png";
 import Image from 'next/image'
 export default function About() {
     return (
-        <main className="flex flex-col overflow-hidden items-center px-24 py-20">
-            <div className="flex items-center justify-center py-10">
-                <h1 className="text-6xl font-bold p-10">ABOUT</h1>
+        <main className="flex flex-col overflow-hidden items-center px-4 sm:px-8 lg:px-24 py-10 md:py-20">
+            <div className="flex items-center justify-center py-4 md:py-10">
+                <h1 className="text-4xl md:text-6xl font-bold p-4 md:p-10">ABOUT</h1>
             </div>
-            <section className="flex flex-col relative h-[80vh]">
+            <section className="flex flex-col relative md:h-[80vh]">
                 <div className="flex ">
-                    <div className="flex flex-col w-[50%] h-[100%]">
-                        <h1 className="text-4xl py-10 font-semibold">Welcome to Automata Flow!</h1>
+                    <div className="flex flex-col w-full md:w-[50%] h-[100%]">
+                        <h1 className="text-2xl md:text-4xl py-6 md:py-10 font-semibold">Welcome to Automata Flow!</h1>
                         <p className="text-lg">We provide a desktop application designed to simulate Deterministic Finite Automata (DFA) and validate input strings based on two given regular expression problems. With interactive DFA diagrams, you can explore and analyze the behavior of DFA in real-time. Simulate input strings, test different scenarios, and gain a deeper understanding of automata theory.</p>
                     </div>
                 </div>
-                <div className="flex  items-center absolute bottom-[-50%] right-[-10%]">
+                <div className="hidden md:flex  items-center absolute bottom-[-50%] right-[-10%]">
                     <Image  width={700} height={700} alt="LowerRifht" src={LowerRightImage}/>
                 </div>
             </section>
-            <section className="flex relative flex-col justify-center h-[60vh]">
+            <section className="flex relative flex-col justify-center py-10 md:py-0 md:h-[60vh]">
                 <div className="flex justify-end ">
-                    <div className="flex flex-col justify-center items-end w-[60%] h-[100%]">
-                        <p className="text-xl text-end">Built with the latest technologies, Automata Flow ensures a seamless experience. Powered by Next.js 13.4 App Router, our application delivers smooth performance and responsiveness. The stylish and modern interface, crafted with Tailwind CSS, offers an aesthetically pleasing environment. Framer Motion is used for captivating animations that enhance your interaction with the application. The User Manual can be downloaded here: *insert link for manual</p>
+                    <div className="flex flex-col justify-center md:items-end w-full md:w-[60%] h-[100%]">
+                        <p className="text-lg md:text-xl md:text-end">Built with the latest technologies, Automata Flow ensures a seamless experience. Powered by Next.js 13.4 App Router, our application delivers smooth performance and responsiveness. The stylish and modern interface, crafted with Tailwind CSS, offers an aesthetically pleasing environment. Framer Motion is used for captivating animations that enhance your interaction with the application. The User Manual can be downloaded here: *insert link for manual</p>
                     </div>
                 </div>
-                <div className="flex  items-center absolute bottom-[-102%] -left-[15%]">
+                <div className="hidden md:flex  items-center absolute bottom-[-102%] -left-[15%]">
                     <Image  width={700} height={700} alt="LowerLeft" src={LowerLeftImage}/>
                     
                 </div>
-                <div className="flex  items-center absolute bottom-[-104%] -left-[15%]">
+                <div className="hidden md:flex  items-center absolute bottom-[-104%] -left-[15%]">
                     <Image  width={700} height={700} alt="LowerLeftS" src={LowerLeftSImage}/>
                     
                 </div>
                 
             </section>
             <section className=" flex flex-col justify-center md:h-[80vh] lg:h-screen z-10">
-                <div className="flex items-center justify-center py-10">
-                    <h1 className="text-2xl font-bold p-10">Meet The Team</h1>
+                <div className="flex items-center justify-center py-6 md:py-10">
+                    <h1 className="text-2xl font-bold p-4 md:p-10">Meet The Team</h1>
                 </div>
                 <div>
-                    <div className="flex">
+                    <div className="grid grid-cols-2 md:flex gap-4 md:gap-0">
                         <div className="flex flex-col justify-center items-center hover:scale-105 transition-all hover:cursor-pointer">
                             <Image  width={500} height={500} alt="Member1" src={Member1}/>
-                            <h2 className="text-xl ">Alphonsus Joseph Bihag</h2>
+                            <h2 className="text-sm sm:text-base md:text-xl text-center">Alphonsus Joseph Bihag</h2>
                         </div>
                         <div className="flex flex-col justify-center items-center hover:scale-105 transition-all hover:cursor-pointer">
                         <Image  width={500} height={500} alt="Member2" src={Member2}/>
-                        <h2 className="text-xl ">Johndel Encabo</h2>
+                        <h2 className="text-sm sm:text-base md:text-xl text-center">Johndel Encabo</h2>
                         
                         </div>
                         
                         <div className="flex flex-col justify-center items-center hover:scale-105 transition-all hover:cursor-pointer">
                         <Image  width={500} height={500} alt="Member3" src={Member3}/>
-                        <h2 className="text-xl ">Edward Raphael Viñegas</h2>
+                        <h2 className="text-sm sm:text-base md:text-xl text-center">Edward Raphael Viñegas</h2>
                         
                         </div>
                     </div>
-                    <div className="flex justify-center">
+                    <div className="grid grid-cols-2 md:flex md:justify-center gap-4 md:gap-0 mt-4 md:mt-0">
                         <div className="flex flex-col justify-center items-center hover:scale-105 transition-all hover:cursor-pointer">
                             <Image  width={500} height={500} alt="Member4" src={Member5}/>
-                            <h2 className="text-xl ">Antonio Miguel Chavez</h2>
+                            <h2 className="text-sm sm:text-base md:text-xl text-center">Antonio Miguel Chavez</h2>
                         </div>
                         <div className="flex flex-col justify-center items-center hover:scale-105 transition-all hover:cursor-pointer">
                             <Image  width={500} height={500} alt="Member5" src={Member4}/>
-                            <h2 className="text-xl ">Maria Cassandra Vitug</h2>
+                            <h2 className="text-sm sm:text-base md:text-xl text-center">Maria Cassandra Vitug</h2>
                         </div>
                     </div>
                 </div>
